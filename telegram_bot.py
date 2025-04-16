@@ -1,18 +1,42 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
+from aiogram import Bot, Dispatcher, types, executor
+from aiogram.dispatcher.filters import Command
 
-# Твій Telegram Token
-BOT_TOKEN = "7626770291:AAG3UC1h3vt1aR9h0ALAg3oo9R1vsNGSzI"
+# Твій токен і chat_id
+API_TOKEN = "7567566641:AAGKaV2Qx5GrhXx_a2Ju_h7KrlvJIRVRX1M8"
+OWNER_ID = 6821675571  # Taras
 
-# Ініціалізація бота і диспетчера
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
-# Хендлер на /start
-@dp.message_handler(commands=['start'])
-async def send_welcome(message: types.Message):
-    await message.answer("Привіт, Тарас! Бот активний.")
+@dp.message_handler(commands=["start"])
+async def start_handler(message: types.Message):
+    if message.from_user.id == OWNER_ID:
+        await message.reply("Привіт, Тоні! Бот активний.")
+    else:
+        await message.reply("Доступ заборонено.")
 
-# Запуск бота
-if __name__ == '__main__':
+@dp.message_handler(commands=["stats"])
+async def stats_handler(message: types.Message):
+    if message.from_user.id == OWNER_ID:
+        await message.reply("Статистика: 250 акаунтів, 5 платформ, USDT прибуток за сьогодні: $42.60")
+    else:
+        await message.reply("Доступ заборонено.")
+
+@dp.message_handler(commands=["farm"])
+async def farm_handler(message: types.Message):
+    if message.from_user.id == OWNER_ID:
+        await message.reply("Фарм запущено. Перевіряю акаунти...")
+        # Тут буде реальна логіка фарму
+    else:
+        await message.reply("Доступ заборонено.")
+
+@dp.message_handler(commands=["withdraw"])
+async def withdraw_handler(message: types.Message):
+    if message.from_user.id == OWNER_ID:
+        await message.reply("Вивід коштів розпочато...")
+        # Тут буде логіка виводу
+    else:
+        await message.reply("Доступ заборонено.")
+
+if __name__ == "__main__":
     executor.start_polling(dp)
